@@ -7,12 +7,11 @@ on:
 jobs:
   test-and-lint:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-    - run: pip install ruff pytest
-    - run: pytest --maxfail=1
-    - run: ruff check --config=ruff.toml src/
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: pip install ruff pytest
+      - run: pytest --maxfail=1
+      - run: ruff check --config=ruff.toml src/
