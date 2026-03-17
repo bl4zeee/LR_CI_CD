@@ -13,9 +13,9 @@ class Car:
         self._fuel_in_tank += fuel_quantity
 
     def drive(self, distance_km: float):
-        # Считаем, что расход 8 литров на 100 км
+    # Считаем, что расход 8 литров на 100 км
         fuel_burned: float = 8 * (distance_km / 100)
         if self._fuel_in_tank < fuel_burned:
             raise Exception("Не доедем жеж...")
-        self._fuel_in_tank -= fuel_burned
+        self._fuel_in_tank -= fuel_burned  # ← ЭТО ВАЖНО!
         return self.get_current_fuel_level()
