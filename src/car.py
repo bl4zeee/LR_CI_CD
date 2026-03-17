@@ -1,3 +1,4 @@
+121212
 class NotEnoughFuelError(Exception):
     pass
 
