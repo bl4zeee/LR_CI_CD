@@ -1,24 +1,29 @@
+class NotEnoughFuelError(Exception):
+    pass
+
+class OverfillError(Exception):
+    pass
+
+NOT_ENOUGH_FUEL_MSG = "Не доедем жеж..."
+OVERFILL_MSG = "Вы пытаетесь залить слишком много бензина!"
+
 class Car:
     def __init__(self, model: str, fuel_capacity: float) -> None:
-        self.model = model
-        self._max_fuel_capacity = fuel_capacity
-        self._fuel_in_tank: float = fuel_capacity  # Изначально бак полный!
+        self._model = model
+        self._max_fuel_capacity: float = fuel_capacity
+        self._fuel_in_tank: float = 0
 
     def get_current_fuel_level(self) -> float:
         return self._fuel_in_tank
 
-    def add_fuel(self, fuel_quantity: float):
-    # ВРЕМЕННО отключаем проверку переполнения для прохождения тестов
-    # if self._max_fuel_capacity - self._fuel_in_tank < fuel_quantity:
-    #     raise Exception("Вы пытаетесь залить слишком много бензина!")
+    def refuel_car(self, fuel_quantity: float):
+        if self._max_fuel_capacity - self._fuel_in_tank < fuel_quantity:
+            raise OverfillError(OVERFILL_MSG)
         self._fuel_in_tank += fuel_quantity
-        if self._fuel_in_tank > self._max_fuel_capacity:
-            self._fuel_in_tank = self._max_fuel_capacity
 
     def drive(self, distance_km: float):
-    # Считаем, что расход 8 литров на 100 км
-        fuel_burned: float = 8 * (distance_km / 100)
+        fuel_burned = 8 * (distance_km / 100)
         if self._fuel_in_tank < fuel_burned:
-            raise Exception("Не доедем жеж...")
-        self._fuel_in_tank -= fuel_burned  # ← ЭТО ВАЖНО!
+            raise NotEnoughFuelError(NOT_ENOUGH_FUEL_MSG)
+        self._fuel_in_tank -= fuel_burned
         return self.get_current_fuel_level()
