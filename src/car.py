@@ -7,7 +7,7 @@ class Car:
     def get_current_fuel_level(self) -> float:
         return self._fuel_in_tank
 
-    def refuel_car(self, fuel_quantity: float):
+    def add_fuel(self, fuel_quantity: float):
         if self._max_fuel_capacity - self._fuel_in_tank < fuel_quantity:
             raise Exception("Вы пытаетесь залить слишком много бензина!")
         self._fuel_in_tank += fuel_quantity
