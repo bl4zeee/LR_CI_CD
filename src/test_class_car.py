@@ -1,20 +1,27 @@
-import unittest
-from .car import Car
+import pytest
 
-class TestCase(unittest.TestCase):
-    def setUp(self):
+from src.car import Car, NotEnoughFuelError, OverfillError
+
+REFUEL_AMOUNT = 20
+DRIVE_DISTANCE = 20
+OVERFILL_AMOUNT = 80
+
+class TestCase:
+    def setup_method(self):
         self.car = Car(model="BMW X5", fuel_capacity=80)
 
-    def tearDown(self):
-        pass
-
     def test_drive(self):
-        self.car.drive(20)
-        self.assertRaises(Exception, lambda: self.car.drive(80000))
+        self.car.refuel_car(REFUEL_AMOUNT)
+        self.car.drive(DRIVE_DISTANCE)
+        assert self.car.get_current_fuel_level() < REFUEL_AMOUNT
+
+    def test_drive_without_fuel(self):
+        with pytest.raises(NotEnoughFuelError):
+            self.car.drive(DRIVE_DISTANCE)
 
     def test_refuel(self):
-        # Заправим 20 литров
-        self.car.refuel_car(20)
-        assert self.car.get_current_fuel_level() == 20
-        # Проверим, что будет исключение, если перельем
-        self.assertRaises(Exception, lambda: self.car.refuel_car(80))
+        self.car.refuel_car(REFUEL_AMOUNT)
+        assert self.car.get_current_fuel_level() == REFUEL_AMOUNT
+
+        with pytest.raises(OverfillError):
+            self.car.refuel_car(OVERFILL_AMOUNT)
